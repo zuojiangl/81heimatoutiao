@@ -63,6 +63,11 @@ export default {
       this.$refs.loginForm.validate(isOK => {
         if (isOK) {
           console.log('前端校验成功')
+          this.$axios
+            .post('/authorizations', this.ruleForm)
+            .then(result => {
+              console.log(result.data.data)
+            })
         }
       })
     }
