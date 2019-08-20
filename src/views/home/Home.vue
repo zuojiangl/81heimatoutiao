@@ -13,7 +13,10 @@
           <layout-header></layout-header>
         </el-header>
         <!-- 主要内容区域 -->
-        <el-main>主体</el-main>
+        <el-main>
+          <!-- 二级路由容器 -->
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>
