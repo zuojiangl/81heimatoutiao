@@ -70,6 +70,12 @@ export default {
               window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
               this.$router.push('/home')
             })
+            .catch(() => {
+              this.$message({
+                message: '手机号或者验证码错误',
+                type: 'warning'
+              })
+            })
         }
       })
     }
