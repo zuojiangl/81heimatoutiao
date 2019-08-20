@@ -6,15 +6,15 @@
     </el-col>
     <el-col :span="3" class="right-header">
       <img :src="user.photo ? user.photo : defaultImg" alt />
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click" @command="commandActive">
         <span class="el-dropdown-link">
           {{user.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item>git地址</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item command="account">个人信息</el-dropdown-item>
+          <el-dropdown-item command="git">git地址</el-dropdown-item>
+          <el-dropdown-item command="out">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-col>
@@ -43,8 +43,17 @@ export default {
       }).then(result => {
         this.user = result.data.data
       })
-    }
+    },
+    commandActive (command) {
+      if (command === 'account') {
 
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/zuojiangl/81heimatoutiao'
+      } else {
+        window.localStorage.clear()
+        this.$router.push('/login')
+      }
+    }
   },
   created () {
     this.getUserInfo()
