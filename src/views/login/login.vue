@@ -66,15 +66,8 @@ export default {
           this.$axios
             .post('/authorizations', this.ruleForm)
             .then(result => {
-              console.log(result.data.data)
-              window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
+              window.localStorage.setItem('user-info', JSON.stringify(result.data))
               this.$router.push('/home')
-            })
-            .catch(() => {
-              this.$message({
-                message: '手机号或者验证码错误',
-                type: 'warning'
-              })
             })
         }
       })
