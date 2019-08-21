@@ -41,7 +41,7 @@ export default {
           'Authorization': `Bearer ${token}`
         }
       }).then(result => {
-        this.user = result.data.data
+        this.user = result.data
       })
     },
     commandActive (command) {
