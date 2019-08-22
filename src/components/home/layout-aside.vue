@@ -4,6 +4,7 @@
       <img src="../../assets/img/logo_admin.png" alt />
     </div>
     <el-menu
+      router
       background-color="#353b4e"
       text-color="#adafb5"
       active-text-color="#ffd04b">
