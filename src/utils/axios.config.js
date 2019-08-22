@@ -1,6 +1,10 @@
 import axios from 'axios'
 import { Message } from 'element-ui' // 引入message模块
+import JSONBig from 'json-bigint'
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
+axios.defaults.transformResponse = [function (data) {
+  return data ? JSONBig.parse(data) : {}
+}]
 axios.interceptors.request.use(function (config) {
   // 在发起请求做一些业务处理
   // 进入配置的注入
