@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
     <!-- el-card具名插槽 -->
     <bread-crumb slot="header">
       <!-- 面包屑具名插槽 -->
@@ -38,7 +38,8 @@ export default {
         pageSize: 10,
         total: 0,
         currentPage: 1
-      }
+      },
+      loading: false
     }
   },
   methods: {
@@ -61,6 +62,7 @@ export default {
     },
     // 查询评论列表数据
     getComments () {
+      this.loading = true
       let pageParams = { page: this.page.currentPage,
         per_page: this.page.pageSize }
       this.$axios({
@@ -72,6 +74,7 @@ export default {
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count// 获取总页数
+        this.loading = false
       })
     },
     formatter (row, column, cellValue, index) {
