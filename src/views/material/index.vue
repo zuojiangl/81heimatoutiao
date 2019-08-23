@@ -5,6 +5,9 @@
       <!-- 面包屑具名插槽 -->
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <el-upload action="" :show-file-list="false" :http-request="uploadImg" class="upload-material">
+      <el-button type="primary">上传素材</el-button>
+    </el-upload>
     <el-tabs v-model="activeName" @tab-click="changeTab">
       <el-tab-pane label="全部素材" name="all">
         <div class="imgList">
@@ -63,6 +66,17 @@ export default {
     }
   },
   methods: {
+    uploadImg (params) {
+      let formData = new FormData()
+      formData.append('image', params.file)
+      this.$axios({
+        method: 'post',
+        url: '/user/images',
+        data: formData
+      }).then(result => {
+        this.getMaterial()
+      })
+    },
     collectOrCancel (item) {
       // console.log(item)
       let mess = item.is_collected ? '取消收藏' : '收藏'
@@ -115,6 +129,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.upload-material {
+  position: absolute;
+  right: 20px;
+  margin-top: -10px;
+}
 .imgList {
   display: flex;
   justify-content: space-around;
