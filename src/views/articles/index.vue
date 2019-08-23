@@ -30,18 +30,21 @@
         ></el-date-picker>
       </el-form-item>
     </el-form>
+    <div class="total_title">
+      共找到{{page.total}}条符合条件的内容
+    </div>
     <!-- 内容列表 -->
   <div class='content-list'>
     <!-- 循环项 -->
     <div class='content-item' v-for="(item,index) in list" :key="index" >
       <!-- 左侧内容 -->
         <div class='left'>
-          <img src="../../assets/img/404.png" alt="">
+          <img :src="item.cover.images[0]" alt="">
           <!-- 内容信息 -->
           <div class='info'>
-            <span>我是内容标题</span>
-            <el-tag style='width:60px'>标签一</el-tag>
-            <span class='date'>2019-08-22 17:21:31</span>
+            <span>{{item.title}}</span>
+            <el-tag :type="item.status | statusType" style='width:60px'>{{item.status | statusText}}</el-tag>
+            <span class='date'>{{item.pubdate}}</span>
           </div>
         </div>
         <!-- 右侧内容 -->
@@ -89,8 +92,52 @@ export default {
       ],
       value: '',
       value1: '',
-      list: [1, 2, 3, 4, 5, 6, 7]
+      list: [],
+      page: {
+        total: 0
+      }
     }
+  },
+  methods: {
+    getArticles () {
+      this.$axios({
+        url: '/articles'
+      }).then(result => {
+        this.list = result.data.results
+        this.page.total = result.data.total_count
+      })
+    }
+  },
+  filters: {
+    statusText (value) {
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        case 4:
+          return '已删除'
+      }
+    },
+    statusType (value) {
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 2:
+          return 'success'
+        case 3:
+          return 'danger'
+        case 4:
+          return 'info'
+      }
+    }
+  },
+  created () {
+    this.getArticles()
   }
 }
 </script>
