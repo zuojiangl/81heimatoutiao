@@ -15,12 +15,7 @@
       </el-form-item>
       <el-form-item label="频道列表">
         <el-select @change="refreshList" v-model="formData.channel_id" placeholder="请选择">
-          <el-option
-            v-for="item in channels"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
+          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="日期选择">
@@ -34,36 +29,44 @@
         ></el-date-picker>
       </el-form-item>
     </el-form>
-    <div class="total_title">
-      共找到{{page.total}}条符合条件的内容
-    </div>
+    <div class="total_title">共找到{{page.total}}条符合条件的内容</div>
     <!-- 内容列表 -->
-  <div class='content-list'>
-    <!-- 循环项 -->
-    <div class='content-item' v-for="(item,index) in list" :key="index" >
-      <!-- 左侧内容 -->
-        <div class='left'>
-          <img :src="item.cover.images[0]" alt="">
+    <div class="content-list">
+      <!-- 循环项 -->
+      <div class="content-item" v-for="(item,index) in list" :key="index">
+        <!-- 左侧内容 -->
+        <div class="left">
+          <img :src="item.cover.images[0]" alt />
           <!-- 内容信息 -->
-          <div class='info'>
+          <div class="info">
             <span>{{item.title}}</span>
-            <el-tag :type="item.status | statusType" style='width:60px'>{{item.status | statusText}}</el-tag>
-            <span class='date'>{{item.pubdate}}</span>
+            <el-tag :type="item.status | statusType" style="width:60px">{{item.status | statusText}}</el-tag>
+            <span class="date">{{item.pubdate}}</span>
           </div>
         </div>
         <!-- 右侧内容 -->
-        <div class='right'>
+        <div class="right">
           <span>
-            <i class='el-icon-edit'></i>
+            <i class="el-icon-edit"></i>
             修改
           </span>
           <span>
-            <i class='el-icon-delete'></i>
+            <i class="el-icon-delete"></i>
             删除
           </span>
         </div>
+      </div>
     </div>
-  </div>
+    <el-row type="flex" justify="center" style="margin:20px 0">
+      <el-pagination
+        @current-change="changePage"
+        :total="page.total"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -74,7 +77,9 @@ export default {
       channels: [],
       list: [],
       page: {
-        total: 0
+        total: 1000,
+        currentPage: 1,
+        pageSize: 10
       },
       // 搜索工具栏数据
       formData: {
@@ -85,14 +90,25 @@ export default {
     }
   },
   methods: {
-    refreshList () {
+    getConditions () {
       let { status, channel_id: cid, dateRange } = this.formData
-      let params = { status: status === 5 ? null : status, // 由于默认给了5 但是如果是5的话 不能传 所以这里特殊处理一下
+      let params = {
+        status: status === 5 ? null : status, // 由于默认给了5 但是如果是5的话 不能传 所以这里特殊处理一下
         channel_id: cid,
         begin_pubdate: dateRange && dateRange.length ? dateRange[0] : null,
         end_pubdate: dateRange && dateRange.length ? dateRange[1] : null
       }
-      this.getArticles(params)
+      params.page = this.page.currentPage
+      params.per_page = this.page.pageSize
+      return params
+    },
+    changePage (newPage) {
+      this.page.currentPage = newPage
+      this.getArticles(this.getConditions())
+    },
+    refreshList () {
+      this.page.currentPage = 1
+      this.getArticles(this.getConditions())
     },
     getChannels () {
       this.$axios({
@@ -140,7 +156,7 @@ export default {
     }
   },
   created () {
-    this.getArticles()
+    this.getArticles({ page: 1, per_page: 10 })
     this.getChannels()
   }
 }
@@ -148,7 +164,7 @@ export default {
 
 <style lang='less' scoped>
 .total_title {
-  height:60px;
+  height: 60px;
   line-height: 60px;
   border-bottom: 1px dashed #ccc;
 }
@@ -162,27 +178,28 @@ export default {
       display: flex;
       align-items: center;
       img {
-        width:150px;
+        width: 150px;
         height: 100px;
         border-radius: 4px;
       }
       .info {
-        margin-left:10px;
+        margin-left: 10px;
         display: flex;
         height: 100px;
         padding: 5px 0;
         flex-direction: column;
         justify-content: space-between;
         .date {
-          color:#999;
-          font-size:12px;
+          color: #999;
+          font-size: 12px;
         }
       }
     }
     .right {
-      span,span i {
-        font-size:12px;
-        color:#333
+      span,
+      span i {
+        font-size: 12px;
+        color: #333;
       }
       span {
         margin-right: 5px;
