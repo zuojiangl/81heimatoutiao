@@ -46,11 +46,11 @@
         </div>
         <!-- 右侧内容 -->
         <div class="right">
-          <span>
+          <span style="cursor:pointer">
             <i class="el-icon-edit"></i>
             修改
           </span>
-          <span>
+          <span  @click="delItem(item)" style="cursor:pointer">
             <i class="el-icon-delete"></i>
             删除
           </span>
@@ -90,6 +90,16 @@ export default {
     }
   },
   methods: {
+    delItem (item) {
+      this.$confirm('您确定删除此文章？', '提示').then(() => {
+        this.$axios({
+          method: 'delete',
+          url: `/articles/${item.id.toString()}`
+        }).then(() => {
+          this.getArticles(this.getConditions())
+        })
+      })
+    },
     getConditions () {
       let { status, channel_id: cid, dateRange } = this.formData
       let params = {
