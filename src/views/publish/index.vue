@@ -49,13 +49,22 @@ export default {
         cover: { type: 0, images: [] } // 默认无图
       },
       rules: {
-        title: [{ required: true, message: '标题内容不能为空' }, { min: 5, max: 30, message: '标题内容必须在5-30个字符之间' }],
+        title: [{ required: true, message: '标题内容不能为空' },
+          { min: 5, max: 30, message: '标题内容必须在5-30个字符之间' }],
         content: [{ required: true, message: '文章内容不能为空' }],
         channel_id: [{ required: true, message: '频道不能为空' }]
       }
     }
   },
   methods: {
+    getArticleById () {
+      let { articleId } = this.$route.params
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data
+      })
+    },
     publish (draft) {
       this.$refs.myForm.validate((isOK) => {
         if (isOK) {
@@ -79,6 +88,8 @@ export default {
     }
   },
   created () {
+    let { articleId } = this.$route.params
+    articleId && this.getArticleById()
     this.getChannels()
   }
 }
