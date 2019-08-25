@@ -1,8 +1,11 @@
 <template>
   <div class="cover-image">
-    <div class="cover-item" v-for="(item,index) in images" :key="index">
+    <div  @click="clickImg(index)" class="cover-item" v-for="(item,index) in images" :key="index">
       <img :src="item ? item: defaultImg" alt="">
     </div>
+    <el-dialog :visible="showDialog" @close="showDialog = false">
+      <select-images @selectOneImg="selectImg"></select-images>
+    </el-dialog>
   </div>
 </template>
 
@@ -11,7 +14,19 @@ export default {
   props: ['type', 'images'],
   data () {
     return {
-      defaultImg: require('../../assets/img/pic_bg.png')
+      defaultImg: require('../../assets/img/pic_bg.png'),
+      showDialog: false,
+      selectIndex: -1
+    }
+  },
+  methods: {
+    clickImg (index) {
+      this.showDialog = true
+      this.selectIndex = index
+    },
+    selectImg (url) {
+      this.$emit('updateImages', url, this.selectIndex)
+      this.showDialog = false
     }
   }
 }
