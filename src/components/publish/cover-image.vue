@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ['type', 'images'],
+  props: ['images'],
   data () {
     return {
       defaultImg: require('../../assets/img/pic_bg.png'),
