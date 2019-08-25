@@ -68,9 +68,12 @@ export default {
     publish (draft) {
       this.$refs.myForm.validate((isOK) => {
         if (isOK) {
+          let { articleId } = this.$route.params
+          let method = articleId ? 'put' : 'post'
+          let url = articleId ? `/articles/${articleId}` : '/articles'
           this.$axios({
-            method: 'post',
-            url: 'articles',
+            method,
+            url,
             data: this.formData,
             params: { draft }
           }).then(result => {
