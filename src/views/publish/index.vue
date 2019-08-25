@@ -11,9 +11,9 @@
         <quill-editor style="width:800px;height:400px;margin-bottom:100px" v-model="formData.content" type="textarea" :rows="5" placeholder="请输入内容"></quill-editor>
       </el-form-item>
       <el-form-item v-model="formData.cover.type" prop="cover" label="封面">
-        <el-radio-group v-model="radio">
+        <el-radio-group @change="changeType" v-model="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
-          <el-radio :label="2">三图</el-radio>
+          <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
@@ -40,7 +40,6 @@
 export default {
   data () {
     return {
-      radio: 1,
       channels: [],
       formData: {
         title: '',
@@ -57,6 +56,15 @@ export default {
     }
   },
   methods: {
+    changeType () {
+      if (this.formData.cover.type === 1) {
+        this.formData.cover.images = ['']
+      } else if (this.formData.cover.type === 3) {
+        this.formData.cover.images = ['', '', '']
+      } else {
+        this.formData.cover.images = []
+      }
+    },
     getArticleById () {
       let { articleId } = this.$route.params
       this.$axios({
