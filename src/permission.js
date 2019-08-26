@@ -1,5 +1,8 @@
 import router from './router'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 router.beforeEach(function (to, from, next) {
+  nprogress.start()
   // 如果是以home为起始 就认为 进入了需要检查token的区域
   if (to.path.startsWith('/home')) {
     // 获取前端的token
@@ -18,5 +21,8 @@ router.beforeEach(function (to, from, next) {
   } else {
     next() // 直接放行
   }
+})
+router.afterEach(() => {
+  nprogress.end()
 })
 export default router
