@@ -1,7 +1,7 @@
 <template>
   <el-row class="layout-header" type="flex" justify="space-between">
     <el-col :span="16" class="left-header">
-      <i class="el-icon-s-unfold"></i>
+      <i @click="openOrClose" :class="currentClass"></i>
       <span>江苏传智播客教育科技股份有限公司</span>
     </el-col>
     <el-col :span="3" class="right-header">
@@ -26,6 +26,7 @@ import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
+      currentClass: 'el-icon-s-fold',
       user: {
 
       },
@@ -33,6 +34,10 @@ export default {
     }
   },
   methods: {
+    openOrClose () {
+      eventBus.$emit('collopseOrClose')
+      this.currentClass = this.currentClass === 'el-icon-s-fold' ? 'el-icon-s-unfold' : 'el-icon-s-fold'
+    },
     getUserInfo () {
       let userInfo = window.localStorage.getItem('user-info')// 获取本地储存的token
       let token = userInfo ? JSON.parse(userInfo).token : {} // 获取token

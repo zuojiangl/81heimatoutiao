@@ -3,7 +3,7 @@
     <!-- 最外层容器 -->
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside style="width:200px;min-height:100vh;background-color:#323745">
+      <el-aside :style="{width}" style="min-height:100vh;background-color:#323745">
         <layout-aside></layout-aside>
       </el-aside>
       <!-- 内部容器区域 -->
@@ -27,11 +27,22 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 // import layoutAside from '../../components/home/layout-aside'
 // import layoutHeader from '../../components/home/layout-header'
+import eventBus from '../../utils/eventBus'
 export default {
   name: 'home',
   components: {
     // 'layout-aside': layoutAside,
     // 'layout-header': layoutHeader
+  },
+  data () {
+    return {
+      width: '200px'
+    }
+  },
+  created () {
+    eventBus.$on('collopseOrClose', () => {
+      this.width = this.width === '200px' ? '60px' : '200px'
+    })
   }
 }
 </script>
