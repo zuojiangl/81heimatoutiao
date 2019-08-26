@@ -20,7 +20,9 @@
         <el-button @click="saveUserInfo" type="primary">保存信息</el-button>
       </el-form-item>
     </el-form>
-    <img class="head-image" src="../../assets/img/404.png" alt="">
+    <el-upload action="" :show-file-list="false" :http-request="upLoadImg">
+      <img class="head-image" :src="formData.photo?formData.photo:imgUrl" alt="">
+    </el-upload>
   </el-card>
 </template>
 
@@ -28,6 +30,7 @@
 export default {
   data () {
     return {
+      imgUrl: require('../../assets/img/404.png'),
       formData: {
         name: '',
         intro: '',
@@ -44,6 +47,17 @@ export default {
     }
   },
   methods: {
+    upLoadImg (params) {
+      let data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        method: 'patch',
+        url: '/user/photo',
+        data
+      }).then(result => {
+        this.formData.photo = result.data.photo
+      })
+    },
     saveUserInfo () {
       this.$refs.userForm.validate((isOK) => {
         if (isOK) {
