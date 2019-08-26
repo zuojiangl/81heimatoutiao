@@ -1,5 +1,5 @@
 <template>
-  <el-card class="parent">
+  <el-card class="parent" v-loading="loading">
     <bread-crumb slot="header">
       <template slot="title">账户管理</template>
     </bread-crumb>
@@ -27,9 +27,11 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
+      loading: false,
       imgUrl: require('../../assets/img/404.png'),
       formData: {
         name: '',
@@ -48,6 +50,7 @@ export default {
   },
   methods: {
     upLoadImg (params) {
+      this.loading = true
       let data = new FormData()
       data.append('photo', params.file)
       this.$axios({
@@ -56,6 +59,8 @@ export default {
         data
       }).then(result => {
         this.formData.photo = result.data.photo
+        this.loading = false
+        eventBus.$emit('uploaduserInfo')
       })
     },
     saveUserInfo () {
@@ -67,6 +72,7 @@ export default {
             data: this.formData
           }).then(result => {
             this.$message({ message: '保存成功', type: 'success' })
+            eventBus.$emit('uploaduserInfo')
           })
         }
       })
