@@ -23,6 +23,6 @@ router.beforeEach(function (to, from, next) {
   }
 })
 router.afterEach(() => {
-  nprogress.end()
+  nprogress.done()
 })
 export default router
